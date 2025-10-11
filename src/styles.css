@@ -7,14 +7,6 @@ body {
     align-items: center;   
     background-color: #050036;  
 }
-
-.game-container {
-    display: block;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #050036;
-}
 .score-board {
     position: absolute;
     top: 20px;
@@ -31,7 +23,4 @@ canvas {
     border: 5px solid #000;
     background-color: #70c5ce;
     display: block;
-    position: absolute;
-    top: 30%;
-    left: 35%;
 }
