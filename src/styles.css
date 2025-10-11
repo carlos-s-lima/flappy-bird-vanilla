@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Minecraftia';
+    src: url('../fonts/Minecraftia-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -7,16 +15,40 @@ body {
     align-items: center;   
     background-color: #050036;  
 }
+
 .score-board {
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Minecraftia';
+    font-size: 16px;
+    color: #000;
+    z-index: 100;
+    width: 180px;
+    height: 80px;
+    
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    gap: 5px;
+}
+
+.score-line, .high-score-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.score-value, .high-score-value {
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 canvas {

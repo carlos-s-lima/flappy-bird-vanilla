@@ -9,10 +9,16 @@
 </head>
 <body>
     <div class="game-container">
-         <div class="score-board">
-            <span class="score">Pontuação: <span id="score">0</span></span>
-            <span class="high-score">Recorde: <span id="high-score">0</span></span>
-        </div>
+        <div class="score-board">
+            <div class="score-line">
+                <span>Pontuação:</span>
+                <span class="score-value" id="score">0</span>
+            </div>
+            <div class="high-score-line">
+                <span>Recorde:</span>
+                <span class="high-score-value" id="high-score">0</span>
+            </div>
+    </div>
         <canvas id="gameCanvas" width="900" height="600"></canvas>
     </div>
 </body>
