@@ -1,0 +1,21 @@
+{
+  "name": "flappybird",
+  "version": "1.0.0",
+  "description": "personal project",
+  "main": "app.js",
+  "scripts": {
+    "test": "run",
+    "dev": "nodemon ./src/app.js"
+  },
+  "keywords": [
+    "game",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "carlos lima",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
