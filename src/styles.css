@@ -18,19 +18,15 @@ body {
 
 .score-board {
     position: absolute;
-    top: 20px;
-    transform: translateX(-50%);
-    left: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
     padding: 15px 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     font-family: 'Minecraftia';
     font-size: 16px;
-    color: #000;
+    color: rgba(255, 255, 255, 0.8);
     z-index: 100;
     width: 180px;
     height: 80px;
+    left: 75%;
     
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -48,7 +44,6 @@ body {
 
 .score-value, .high-score-value {
     font-weight: bold;
-    color: #2c3e50;
 }
 
 .gameContainer {
@@ -61,7 +56,7 @@ body {
     overflow: hidden;
 }
 
-.pipe-duo {
+.barreiras {
     position: absolute;
     left: 400px;
     height: 100%;
@@ -70,32 +65,32 @@ body {
     justify-content: space-between;
 }
 
-.pipe-top {
+.barreira {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.pipe-top .corpo {
+.barreira .corpo {
     width: 80px;
     height: 200px;
-    background: linear-gradient(#32CD32, #228B22, #006400);
-}
-
-.pipe-bottom {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.pipe-bottom .corpo {
-    width: 80px;
-    height: 250px;
-    background: linear-gradient(#006400, #228B22, #32CD32);
+    background: linear-gradient(#32CD32, #39b639, #188518);
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
 }
 
 .bico {
-    width: 100px;
-    height: 30px;
-    background: linear-gradient(to bottom, #196F19, #004d00);
+    width: 90px;
+    height: 25px;
+    background: linear-gradient(#32CD32, #39b639, #188518);
+    border: 2px solid #000;
+}
+
+.bird  {
+    position: absolute;
+    width: 70px;
+    height: 50px;
+    top: 50%;
+    left: 40%;
+    transform: translate(0%, -50%);
 }
