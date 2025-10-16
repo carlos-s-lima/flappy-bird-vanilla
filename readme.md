@@ -33,6 +33,10 @@ Este é um clone fiel do famoso jogo Flappy Bird, desenvolvido do zero utilizand
 
 Simplesmente abra o arquivo `index.html` no seu navegador preferido.
 
+### Opção 2: GitHub Pages
+
+[Acesse o projeto aqui](https://carlos-s-lima.github.io/flappy-bird-vanilla/src/)
+
 ## Como Jogar
 
 1. Clique no botão **Start** para começar
