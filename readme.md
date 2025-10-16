@@ -127,8 +127,8 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 ## Autor
 
 Seu Nome
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
-- LinkedIn: [Seu Nome](https://linkedin.com/in/seu-perfil)
+- GitHub: [@carlos-s-lima](https://github.com/carlos-s-lima)
+- LinkedIn: [Carlos Lima](https://linkedin.com/in/carlos-s-lima)
 
 ## Agradecimentos
 
