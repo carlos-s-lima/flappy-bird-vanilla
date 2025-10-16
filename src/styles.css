@@ -32,6 +32,11 @@ body {
     grid-template-rows: 1fr 1fr;
     align-items: center;
     gap: 5px;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .score-line, .high-score-line {
@@ -93,4 +98,52 @@ body {
     left: 40%;
     transform-origin: center center;
     transition: transform 0.1s ease-out;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+#start-screen, #restart-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-button, #restart-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+}
+
+#start-button:hover, #restart-button:hover {
+    transform: scale(1.1); 
+}
+
+#start-button img, #restart-button img {
+    width: 150px;
+    display: block;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
 }

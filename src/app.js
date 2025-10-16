@@ -1,9 +1,19 @@
+// ===== VARIÁVEIS GLOBAIS =====
+let gameLoop = null
+let esteira = null
+let passaro = null
+let eventListenersAdicionados = false
+
+// ===== FUNÇÕES UTILITÁRIAS =====
+
 // Função construtora de um elemento qualquer
 function novoElemento(tagName, className) {
     const element = document.createElement(tagName)
     element.className = className
     return element
 }
+
+// ===== CONSTRUTORES DE OBJETOS DO JOGO =====
 
 // Função construtora de uma barreira
 function Barreira(reversa = false) {
@@ -79,10 +89,9 @@ function Passaro(alturaJogo) {
 
     this.getY = () => parseInt(this.elemento.style.bottom.split("px")[0])
     this.setY = y => {
-
-        if (y <=0) {
-            y = 0;
-            this.setAngulo(0);
+        if (y <= 0) {
+            y = 0
+            this.setAngulo(0)
         }
         this.elemento.style.bottom = `${y}px`
     }
@@ -116,7 +125,10 @@ function Passaro(alturaJogo) {
         this.setAngulo(-20)
     }
 }
-// Função responsável por verificar colisão
+
+// ===== FUNÇÕES DE COLISÃO =====
+
+// Função responsável por verificar sobreposição entre dois elementos
 function estaoSobrepostos(elementoA, elementoB) {
     const a = elementoA.getBoundingClientRect()
     const b = elementoB.getBoundingClientRect()
@@ -127,8 +139,9 @@ function estaoSobrepostos(elementoA, elementoB) {
     return horizontal && vertical
 }
 
+// Função responsável por verificar colisão do pássaro com as barreiras
 function colidiu(passaro, esteira) {
-    let colidiu = false;
+    let colidiu = false
     esteira.pares.forEach(parDeBarreiras => {
         if(!colidiu) {
             const superior = parDeBarreiras.superior.elemento
@@ -138,14 +151,49 @@ function colidiu(passaro, esteira) {
     })
     return colidiu
 }
-// Função start
+
+// ===== FUNÇÕES DE CONTROLE DO JOGO =====
+
+// Função para limpar o jogo completamente
+function limparJogo() {
+    // Limpar o interval do loop
+    if (gameLoop) {
+        clearInterval(gameLoop)
+        gameLoop = null
+    }
+    
+    // Remover elementos do DOM
+    const areaDoJogo = document.querySelector(".gameContainer")
+    
+    if (passaro && passaro.elemento && passaro.elemento.parentNode) {
+        areaDoJogo.removeChild(passaro.elemento)
+    }
+    
+    if (esteira && esteira.pares) {
+        esteira.pares.forEach(par => {
+            if (par.elemento && par.elemento.parentNode) {
+                areaDoJogo.removeChild(par.elemento)
+            }
+        })
+    }
+    
+    // Resetar referências
+    esteira = null
+    passaro = null
+}
+
+// Função para iniciar/reiniciar o jogo
 function start() {
+    // Limpar jogo anterior se existir
+    limparJogo()
+    
     const alturaJogo = 600
     const larguraJogo = 1000
     const areaDoJogo = document.querySelector(".gameContainer")
     
     let pontos = 0
     const scoreElement = document.getElementById("score")
+    scoreElement.textContent = '0'
     
     // Função para notificar pontos
     const notificarPonto = () => {
@@ -153,30 +201,56 @@ function start() {
         scoreElement.textContent = pontos
     }
     
-    const esteira = new Esteira(alturaJogo, larguraJogo, 200, 400, notificarPonto)
-    const passaro = new Passaro(alturaJogo)
+    esteira = new Esteira(alturaJogo, larguraJogo, 200, 400, notificarPonto)
+    passaro = new Passaro(alturaJogo)
     
     areaDoJogo.appendChild(passaro.elemento)
     esteira.pares.forEach(par => areaDoJogo.appendChild(par.elemento))
 
-    const loop = setInterval(() => {
+    // Loop principal do jogo
+    gameLoop = setInterval(() => {
         esteira.animar()
         passaro.gravidade()
         if (colidiu(passaro, esteira)) {
-            clearInterval(loop)
+            clearInterval(gameLoop)
+            const restartScreen = document.getElementById('restart-screen')
+            restartScreen.style.display = 'flex'
         }
     }, 20)
     
-    document.addEventListener('keydown', function(event) {
-        if (event.code === 'Space') {
-            event.preventDefault()
-            passaro.voar()
-        }
-    })
+    if (!eventListenersAdicionados) {
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault()
+                if (passaro) passaro.voar()
+            }
+        })
 
-    document.addEventListener('click', function() {
-        passaro.voar()
-    })
+        document.addEventListener('click', function(event) {
+            // Evitar que cliques nos botões de start/restart acionem o voar
+            if (!event.target.closest('#start-button') && 
+                !event.target.closest('#restart-button')) {
+                if (passaro) passaro.voar()
+            }
+        })
+        
+        eventListenersAdicionados = true
+    }
 }
 
-start()
+// ===== INICIALIZAÇÃO E EVENT LISTENERS =====
+
+const startScreen = document.getElementById('start-screen')
+const startButton = document.getElementById('start-button')
+
+startButton.addEventListener('click', () => {
+    startScreen.style.display = 'none'
+    start()
+})
+
+const restartButton = document.getElementById('restart-button')
+restartButton.addEventListener('click', () => {
+    const restartScreen = document.getElementById('restart-screen')
+    restartScreen.style.display = 'none'
+    start()
+})
