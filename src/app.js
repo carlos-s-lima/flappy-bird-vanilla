@@ -1,9 +1,10 @@
-// Função construtora de um elemento
+// Função construtora de um elemento qualquer
 function novoElemento(tagName, className) {
     const element = document.createElement(tagName)
     element.className = className
     return element
 }
+
 // Função construtora de uma barreira
 function Barreira(reversa = false) {
     this.elemento = novoElemento("div", "barreira")
@@ -16,6 +17,7 @@ function Barreira(reversa = false) {
 
     this.setAltura = altura => corpo.style.height = `${altura}px`
 }
+
 // Função construtora de um par de barreiras
 function parDeBarreiras(altura, abertura, x) {
     this.elemento = novoElemento("div", "barreiras")
@@ -43,7 +45,7 @@ function parDeBarreiras(altura, abertura, x) {
     this.setX(x)
 }
 
-// Função responsável por criar, animar e reaproveitar as barreiras do jogo //
+// Função responsável por criar, animar e reaproveitar as barreiras do jogo
 function Esteira(altura, largura, abertura, espaco, notificarPonto) {
     this.pares = [
         new parDeBarreiras(altura, abertura, largura),
@@ -63,18 +65,75 @@ function Esteira(altura, largura, abertura, espaco, notificarPonto) {
                 par.sortearAbertura()
             }
         
-        const meio = largura / 2
-        const cruzouOMeio = par.getX() + deslocamento >= meio && par.getX() < meio
-        if(cruzouOMeio) notificarPonto()
-
+            const meio = largura / 2
+            const cruzouOMeio = par.getX() + deslocamento >= meio && par.getX() < meio
+            if(cruzouOMeio) notificarPonto()
         })
+    }
+}
+
+// Função construtora do Pássaro
+function Passaro(alturaJogo) {
+    this.elemento = novoElemento("img", "bird")
+    this.elemento.src = "../img/birdNew.png"
+
+    this.getY = () => parseInt(this.elemento.style.bottom.split("px")[0])
+    this.setY = y => {
+        if (y <= 0) {
+            y = 0;
         }
+        this.elemento.style.bottom = `${y}px`
     }
 
-    const esteira = new Esteira(700, 1000, 300, 400)
+    this.setY(alturaJogo / 2)
+
+    this.gravidade = () => {
+        let y = this.getY()
+        this.setY(y - 4)
+    }
+    
+    this.voar = () => {
+        let y = this.getY()
+        this.setY(y + 70)
+    }
+}
+
+// Função start
+function start() {
+    const alturaJogo = 600
+    const larguraJogo = 1000
     const areaDoJogo = document.querySelector(".gameContainer")
+    
+    let pontos = 0
+    const scoreElement = document.getElementById("score")
+    
+    // Função para notificar pontos
+    const notificarPonto = () => {
+        pontos++
+        scoreElement.textContent = pontos
+    }
+    
+    const esteira = new Esteira(alturaJogo, larguraJogo, 200, 400, notificarPonto)
+    const passaro = new Passaro(alturaJogo)
+    
+    areaDoJogo.appendChild(passaro.elemento)
     esteira.pares.forEach(par => areaDoJogo.appendChild(par.elemento))
 
     setInterval(() => {
         esteira.animar()
+        passaro.gravidade()
     }, 20)
+    
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Space') {
+            event.preventDefault()
+            passaro.voar()
+        }
+    })
+
+    document.addEventListener('click', function() {
+        passaro.voar()
+    })
+}
+
+start()
