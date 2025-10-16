@@ -79,25 +79,65 @@ function Passaro(alturaJogo) {
 
     this.getY = () => parseInt(this.elemento.style.bottom.split("px")[0])
     this.setY = y => {
-        if (y <= 0) {
+
+        if (y <=0) {
             y = 0;
+            this.setAngulo(0);
         }
         this.elemento.style.bottom = `${y}px`
     }
 
+    // Controle de rotação
+    let angulo = 0
+    this.setAngulo = novoAngulo => {
+        angulo = novoAngulo
+        this.elemento.style.transform = `rotate(${angulo}deg)`
+    }
+
+    // Inicializar a posição usando bottom
     this.setY(alturaJogo / 2)
+    this.setAngulo(0)
 
     this.gravidade = () => {
         let y = this.getY()
-        this.setY(y - 4)
+        this.setY(y - 2.5)
+        
+        // Rotacionar para baixo gradualmente (máximo +45 graus)
+        if (angulo < 45) {
+            this.setAngulo(angulo + 1.5)
+        }
     }
     
     this.voar = () => {
         let y = this.getY()
-        this.setY(y + 70)
+        this.setY(y + 55)
+        
+        // Rotacionar para cima ao voar (-20 graus)
+        this.setAngulo(-20)
     }
 }
+// Função responsável por verificar colisão
+function estaoSobrepostos(elementoA, elementoB) {
+    const a = elementoA.getBoundingClientRect()
+    const b = elementoB.getBoundingClientRect()
 
+    const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left
+    const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top
+
+    return horizontal && vertical
+}
+
+function colidiu(passaro, esteira) {
+    let colidiu = false;
+    esteira.pares.forEach(parDeBarreiras => {
+        if(!colidiu) {
+            const superior = parDeBarreiras.superior.elemento
+            const inferior = parDeBarreiras.inferior.elemento
+            colidiu = estaoSobrepostos(passaro.elemento, superior) || estaoSobrepostos(passaro.elemento, inferior)
+        }
+    })
+    return colidiu
+}
 // Função start
 function start() {
     const alturaJogo = 600
@@ -119,9 +159,12 @@ function start() {
     areaDoJogo.appendChild(passaro.elemento)
     esteira.pares.forEach(par => areaDoJogo.appendChild(par.elemento))
 
-    setInterval(() => {
+    const loop = setInterval(() => {
         esteira.animar()
         passaro.gravidade()
+        if (colidiu(passaro, esteira)) {
+            clearInterval(loop)
+        }
     }, 20)
     
     document.addEventListener('keydown', function(event) {
