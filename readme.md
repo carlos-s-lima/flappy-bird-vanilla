@@ -29,30 +29,7 @@ Este é um clone fiel do famoso jogo Flappy Bird, desenvolvido do zero utilizand
 - Navegador web moderno (Chrome, Firefox, Safari, Edge)
 - Servidor web local (opcional, mas recomendado)
 
-### Opção 1: Servidor Local (Recomendado)
-
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/flappy-bird-clone.git
-
-# Entre no diretório
-cd flappy-bird-clone
-
-# Inicie um servidor local
-# Python 3
-python -m http.server 8000
-
-# OU Python 2
-python -m SimpleHTTPServer 8000
-
-# OU Node.js (com npx)
-npx http-server
-
-# Acesse no navegador
-# http://localhost:8000
-```
-
-### Opção 2: Abrir Diretamente
+### Opção 1: Abrir Diretamente
 
 Simplesmente abra o arquivo `index.html` no seu navegador preferido.
 
