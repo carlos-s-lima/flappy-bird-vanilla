@@ -3,6 +3,8 @@ let gameLoop = null
 let esteira = null
 let passaro = null
 let eventListenersAdicionados = false
+let highScore = 0
+let jogoAtivo = false
 
 // ===== FUNÇÕES UTILITÁRIAS =====
 
@@ -154,15 +156,35 @@ function colidiu(passaro, esteira) {
 
 // ===== FUNÇÕES DE CONTROLE DO JOGO =====
 
-// Função para limpar o jogo completamente
+function carregarHighScore() {
+    const saved = localStorage.getItem('flappyBirdHighScore')
+    highScore = saved ? parseInt(saved) : 0
+    const highScoreElement = document.getElementById('high-score')
+    if (highScoreElement) {
+        highScoreElement.textContent = highScore
+    }
+}
+
+function salvarHighScore(pontos) {
+    if (pontos > highScore) {
+        highScore = pontos
+        localStorage.setItem('flappyBirdHighScore', highScore.toString())
+        const highScoreElement = document.getElementById('high-score')
+        if (highScoreElement) {
+            highScoreElement.textContent = highScore
+        }
+    }
+}
+
 function limparJogo() {
-    // Limpar o interval do loop
+
+    jogoAtivo = false
+    
     if (gameLoop) {
         clearInterval(gameLoop)
         gameLoop = null
     }
     
-    // Remover elementos do DOM
     const areaDoJogo = document.querySelector(".gameContainer")
     
     if (passaro && passaro.elemento && passaro.elemento.parentNode) {
@@ -177,7 +199,6 @@ function limparJogo() {
         })
     }
     
-    // Resetar referências
     esteira = null
     passaro = null
 }
@@ -195,7 +216,6 @@ function start() {
     const scoreElement = document.getElementById("score")
     scoreElement.textContent = '0'
     
-    // Função para notificar pontos
     const notificarPonto = () => {
         pontos++
         scoreElement.textContent = pontos
@@ -207,12 +227,16 @@ function start() {
     areaDoJogo.appendChild(passaro.elemento)
     esteira.pares.forEach(par => areaDoJogo.appendChild(par.elemento))
 
+    jogoAtivo = true
+
     // Loop principal do jogo
     gameLoop = setInterval(() => {
         esteira.animar()
         passaro.gravidade()
         if (colidiu(passaro, esteira)) {
             clearInterval(gameLoop)
+            jogoAtivo = false
+            salvarHighScore(pontos)
             const restartScreen = document.getElementById('restart-screen')
             restartScreen.style.display = 'flex'
         }
@@ -220,7 +244,7 @@ function start() {
     
     if (!eventListenersAdicionados) {
         document.addEventListener('keydown', function(event) {
-            if (event.code === 'Space') {
+            if (event.code === 'Space' && jogoAtivo) {
                 event.preventDefault()
                 if (passaro) passaro.voar()
             }
@@ -229,7 +253,8 @@ function start() {
         document.addEventListener('click', function(event) {
             // Evitar que cliques nos botões de start/restart acionem o voar
             if (!event.target.closest('#start-button') && 
-                !event.target.closest('#restart-button')) {
+                !event.target.closest('#restart-button') &&
+                jogoAtivo) {
                 if (passaro) passaro.voar()
             }
         })
@@ -239,6 +264,8 @@ function start() {
 }
 
 // ===== INICIALIZAÇÃO E EVENT LISTENERS =====
+
+carregarHighScore()
 
 const startScreen = document.getElementById('start-screen')
 const startButton = document.getElementById('start-button')
